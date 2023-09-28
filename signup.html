@@ -253,17 +253,16 @@ header{
             <span id="full-name-error" class="error"></span>
         </div>
         <div class="form-row">
-<label for="gender">Gender:</label>
-<input type="radio" id="male" name="gender" value="Male">
-<label for="male">Male</label>
-<span id="gender-error" class="error"></span>
-<input type="radio" id="female" name="gender" value="Female">
-<label for="female">Female</label>
-<span id="gender-error" class="error"></span>
-<input type="radio" id="other" name="gender" value="Other">
-<label for="other">Other</label>
-<span id="gender-error" class="error"></span>
-</div>
+          <label>Gender:</label>
+          <input type="radio" id="male" name="gender" value="Male" required>
+          <label for="male">Male</label>
+          <input type="radio" id="female" name="gender" value="Female">
+          <label for="female">Female</label>
+          <input type="radio" id="other" name="gender" value="Other">
+          <label for="other">Other</label>
+          <span id="gender-error" class="error"></span>
+      </div>
+      
         <div class="form-row">
             <label for="dob">Date of Birth:</label>
             <input type="date" id="dob" name="dob" required>
@@ -292,7 +291,7 @@ header{
 </div>
 
 <div class="form-row">
-<input type="text" id="zip" name="zip" placeholder="Postal/ZIP Code" required>
+<input type="text" id="zip" name="zip" placeholder="Postal Code" required>
 <span id="zip-error" class="error"></span>
 </div>
 
@@ -391,7 +390,8 @@ header{
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const fullNameInput = document.getElementById("first-name");
-    const genderInputs = document.querySelectorAll("input[name='gender']");
+    const genderInputs = document.querySelectorAll('input[name="gender"]');
+    const genderError = document.getElementById("gender-error");
     const dobInput = document.getElementById("dob");
     const emailInput = document.getElementById("email");
     const phoneInput = document.getElementById("phone");
@@ -428,15 +428,24 @@ header{
 }
 
 
-    function validateGender() {
-      const selectedGender = [...genderInputs].some((input) => input.checked);
-      const errorElement = document.getElementById("gender-error");
-      if (!selectedGender) {
-        errorElement.textContent = errorMessages.gender;
-      } else {
-        errorElement.textContent = "";
-      }
+function validateGender() {
+    const selectedGender = [...genderInputs].some((input) => input.checked);
+    const genderError = document.getElementById("gender-error");
+
+    if (!selectedGender) {
+        genderError.textContent = "Please select a gender.";
+        return false; // Validation failed
+    } else {
+        genderError.textContent = "";
+        return true; // Validation successful
     }
+}
+
+genderInputs.forEach((input) =>
+    input.addEventListener("change", validateGender)
+);
+
+
     function validateDOB() {
       const dob = dobInput.value.trim();
       const dobError = document.getElementById("dob-error");
@@ -472,35 +481,42 @@ header{
     }
 
     function validateHomeAddress() {
-      const homeAddress = homeAddressInput.value.trim();
-      const errorElement = document.getElementById("home-address-error");
-      if (homeAddress === "") {
-        errorElement.textContent = errorMessages.homeAddress;
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+    const homeAddress = homeAddressInput.value.trim();
+    const errorElement = document.getElementById("home-address-error");
+    const minLength = 3; // Minimum length
 
-    function validateCity() {
-      const city = cityInput.value.trim();
-      const errorElement = document.getElementById("city-error");
-      if (city === "") {
-        errorElement.textContent = errorMessages.city;
-      } else {
+    if (homeAddress.length < minLength || /^\d/.test(homeAddress)) {
+        errorElement.textContent = "Home Address must start with a letter and be at least 3 characters long.";
+    } else {
         errorElement.textContent = "";
-      }
     }
+}
 
-    function validateZIP() {
-      const zip = zipInput.value.trim();
-      const zipPattern = /^\d{5}$/; // Assumes a 5-digit ZIP code
-      const errorElement = document.getElementById("zip-error");
-      if (!zipPattern.test(zip)) {
-        errorElement.textContent = errorMessages.zip;
-      } else {
+
+function validateCity() {
+    const city = cityInput.value.trim();
+    const errorElement = document.getElementById("city-error");
+    const minLength = 3; // Minimum length
+
+    if (!/^[a-zA-Z]+$/.test(city) || city.length < minLength) {
+        errorElement.textContent = "City must contain only letters and be at least 3 characters long.";
+    } else {
         errorElement.textContent = "";
-      }
     }
+}
+
+function validateZIP() {
+    const zip = zipInput.value.trim();
+    const zipPattern = /^\d{6}$/; // Assumes a 6-digit ZIP code
+    const errorElement = document.getElementById("zip-error");
+
+    if (!zipPattern.test(zip)) {
+        errorElement.textContent = "ZIP code must contain exactly 6 digits and no letters.";
+    } else {
+        errorElement.textContent = "";
+    }
+}
+
     function validatePassword() {
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;

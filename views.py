@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect,HttpResponse
 from django.contrib.auth import authenticate,login
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib import auth
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -39,3 +41,8 @@ def appoinment(request):
     return render(request,'appoinment.html')
 def user(request):
     return render(request,'user.html')
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
+def services1(request):
+    return render(request,'services1.html')

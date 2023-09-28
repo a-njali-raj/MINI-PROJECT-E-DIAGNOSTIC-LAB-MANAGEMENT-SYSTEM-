@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="{% static '/assets/vendor/animate/animate.css'%}">
 
   <link rel="stylesheet" href="{% static '/assets/css/theme.css' %}">
+  
   <style>
      body {
         font-family: Arial, sans-serif;
@@ -93,6 +94,21 @@
         border-radius: 3px;
         font-size: 16px;
     }
+    .radio-box {
+      display: flex;
+      align-items: center;
+    }
+
+    .radio-label {
+      margin-right: 10px;
+    }
+    .new-address-fields.visible {
+      display: block;
+    }
+
+    .new-address-fields .form-group {
+      margin-right: 20px;
+    }
 </style>
 </head>
 <body>
@@ -148,6 +164,12 @@
               </li>
   
           </ul>
+          {% if user.is_authenticated %}
+          <a href="logout" class="btn btn-primary ml-lg-3">Logout</a>
+        {% else %}
+          <a href="login.html" class="btn btn-primary ml-lg-3">Login/Signup</a>
+        {% endif %}
+            </div>
         </div> <!-- .navbar-collapse -->
       </div> <!-- .container -->
     </nav>
@@ -161,12 +183,17 @@
         <div class="frminput">
             
             
-            <h3><center><b><span style="color: rgb(146, 197, 236);">Book Now!</span></b></center></h3>
-
-            <label for="preferreddatetime">Preferred Date and Time:</label>
-            <input type="datetime-local" id="preferreddatetime" name="preferreddatetime" required>
-            
-            <br><br>         
+            <h3><center><b><span style="color: rgb(146, 197, 236);">Book Now!</span></b></center></h3> <br><br>
+            <input type="text" id="testname" name="testname" placeholder="Test name" required>
+            <p>Preferred Date: <input type="date" id="preferred-date" value="2023-09-29"></p>
+<p>Preferred Time:
+  <select id="preferred-time">
+    <option value="09:00 AM">09:00 AM</option>
+    <option value="10:00 AM">10:00 AM</option>
+    <option value="11:00 AM">11:00 AM</option>
+    <!-- Add more time options as needed -->
+  </select>
+</p>       
 
             <select id="persons" name="persons" onchange="showBeneficiaryFields(this.value); calculateTotalAmount();" required>
                 <option value="1">Number of Persons</option>
@@ -185,16 +212,27 @@
 
             
 			<input type="text" id="email" name="email" placeholder="Email" required>
-            <input type="text" id="phone" name="phone" placeholder="Mobile (Indian Number Only)" required>
+            <input type="text" id="phone" name="phone" placeholder="Mobile " required>
 
-            <textarea id="address" name="address" placeholder="Complete Address" required></textarea>
-            <label class="sublbl" style="font-size:12px;padding-bottom:10px;">Order with incomplete/invalid address will be rejected.</label>
-
+            <div class="radio-box">
+              <label class="radio-label">
+                  <input type="radio" id="current-address-choice" name="address-choice" value="current-address" checked>
+                  Use Current Address
+              </label>
+              <label class="radio-label">
+                  <input type="radio" id="new-address-choice" name="address-choice" value="new-address">
+                  Enter New Address
+              </label>
+          </div>
+          
+          <div id="new-address-fields" class="new-address-fields" style="display: none;">
+            <input type="text" id="new-home-address" name="new-home-address" placeholder="New Home Address">
+            <input type="text" id="new-city" name="new-city" placeholder="New City">
+            <input type="text" id="new-pincode" name="new-pincode" placeholder="New Pincode">
+        </div>
+      
             <!-- Additional tests checkboxes -->
-<hr>
-            <label class="sublbl">Tick To Add Additional Tests(Optional)</label>
-            <br><br>
-            
+
             <label class="agreecheck">
                 <input type="checkbox" id="additionalTestsCheckbox" name="additional_tests" value="1" onclick="toggleAdditionalTestDropdown();">
                 <span>Add Additional Tests</span>
@@ -202,7 +240,7 @@
 
             <!-- Additional test dropdown container -->
             <div class="additional-test-container" id="additionalTestContainer">
-                <label for="additionalTestsSelect">Select Additional Test:</label>
+               
                 <select id="additionalTestsSelect" name="additional_tests_select">
                     <option value="">Select Test</option>
                     <option value="Test1">Test 1</option>
@@ -211,23 +249,18 @@
                 </select>
             </div>
             <br>
-			
-            <!-- Include checkboxes for additional tests here -->
-
-            <!-- Hard copy checkbox -->
-
             
-            <!-- Coupons input and apply button -->
+            <span>Choose mode of sample collection :</span><br><br>
+              <label style="display: inline;">
+                  <input type="radio" id="homeAppointment" name="appointmentType" value="Home" checked> Home
+              </label>
+              <label style="display: inline;">
+                  <input type="radio" id="labAppointment" name="appointmentType" value="Lab"> Lab
+              </label>
+          </div>
+          
 
-            <label>
-                <input type="radio" id="homeAppointment" name="appointmentType" value="Home" checked>
-                Home
-            </label>
-            <label>
-                <input type="radio" id="labAppointment" name="appointmentType" value="Lab">
-                Lab
-            </label>
-            
+          
 		<br>
 
             <!-- Total amount calculation -->
@@ -393,7 +426,29 @@
             additionalTestContainer.style.display = "none";
         }
     }
-    
+    function toggleNewAddressFields() {
+            const newAddressChoice = document.getElementById("new-address-choice");
+            const newAddressFields = document.getElementById("new-address-fields");
+            const newPincodeContainer = document.getElementById("new-pincode-container");
+
+            if (newAddressChoice.checked) {
+                newAddressFields.style.display = "block";
+                newPincodeContainer.style.display = "block";
+            } else {
+                newAddressFields.style.display = "none";
+                newPincodeContainer.style.display = "none";
+            }
+        }
+
+        // Add an event listener to the radio buttons to detect changes
+        const newAddressChoice = document.getElementById("new-address-choice");
+        const currentAddressChoice = document.getElementById("current-address-choice");
+
+        newAddressChoice.addEventListener("change", toggleNewAddressFields);
+        currentAddressChoice.addEventListener("change", toggleNewAddressFields);
+
+        // Initial check to hide/show based on the default selection
+        toggleNewAddressFields();
 </script>
 </body>
 </html>
