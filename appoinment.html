@@ -1,0 +1,399 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <meta name="copyright" content="MACode ID, https://macodeid.com/">
+
+  <title>One Health - Medical Center HTML5 Template</title>
+
+  <link rel="stylesheet" href="{% static '/assets/css/maicons.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/css/bootstrap.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/vendor/owl-carousel/css/owl.carousel.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/vendor/animate/animate.css'%}">
+
+  <link rel="stylesheet" href="{% static '/assets/css/theme.css' %}">
+  <style>
+     body {
+        font-family: Arial, sans-serif;
+        background-image: url('{% static "assets/img/bg_image_2.jpg" %}'); /* Replace with the actual path to your background image */
+        background-size: cover; /* This will cover the entire viewport */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* This will keep the background fixed while scrolling */
+    }
+    header {
+    background-color: #fff; /* Set the background color to white */
+}
+    /* CSS for the form container */
+    .form-container {
+        max-width: 600px; /* Adjust the width as needed */
+        margin: 0 auto; /* Center the container horizontally */
+        padding: 20px; /* Add padding to the container */
+        border: 1px solid #ccc; /* Add a border around the container */
+        border-radius: 5px; /* Add rounded corners to the container */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+        background-color: #f9f9f9; /* Set the background color */
+    }
+
+    /* Apply styles to form elements within the container */
+    .form-container input[type="text"],
+    .form-container input[type="button"],
+    .form-container select,
+    .form-container textarea,
+    .form-container label {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 16px;
+    }
+
+    /* Style checkboxes and radio buttons */
+    .form-container input[type="checkbox"],
+    .form-container input[type="radio"] {
+        margin-right: 5px;
+    }
+
+    /* Style the submit button */
+    .form-container input[type="submit"] {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: background-color 0.3s;
+    }
+
+    .form-container input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+    .additional-test-container {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .additional-test-container label {
+        display: block;
+    }
+
+    .additional-test-container select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+
+  <!-- Back to top button -->
+  <div class="back-to-top"></div>
+
+  <header>
+    <div class="topbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8 text-sm">
+            <div class="site-info">
+              <a href="#"><span class="mai-call text-primary"></span> +00 123 4455 6666</a>
+              <span class="divider">|</span>
+              <a href="#"><span class="mai-mail text-primary"></span> mail@example.com</a>
+            </div>
+          </div>
+          
+          </div>
+        </div> <!-- .row -->
+      </div> <!-- .container -->
+    </div> <!-- .topbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
+      <div class="container">
+        <a class="navbar-brand" href="#"><span class="text-primary">One</span>-Health</a>
+            
+          </div>
+        
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport" aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupport">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about.html">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="services.html">Services</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+            <li class="nav-item  active">
+                <a class="nav-link" href="appoinment.html">Appoinment</a>
+              </li>
+  
+          </ul>
+        </div> <!-- .navbar-collapse -->
+      </div> <!-- .container -->
+    </nav>
+  </header>
+<br><br>
+  <body>
+  
+
+    <div class="form-container">
+        <!-- Your form content goes here -->
+        <div class="frminput">
+            
+            
+            <h3><center><b><span style="color: rgb(146, 197, 236);">Book Now!</span></b></center></h3>
+
+            <label for="preferreddatetime">Preferred Date and Time:</label>
+            <input type="datetime-local" id="preferreddatetime" name="preferreddatetime" required>
+            
+            <br><br>         
+
+            <select id="persons" name="persons" onchange="showBeneficiaryFields(this.value); calculateTotalAmount();" required>
+                <option value="1">Number of Persons</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <!-- Add more options for the number of persons -->
+            </select>
+
+           
+
+            <div id="beneficiaryFields">
+                <!-- Beneficiary input fields will be added here dynamically based on the number of persons -->
+            </div>
+
+            
+			<input type="text" id="email" name="email" placeholder="Email" required>
+            <input type="text" id="phone" name="phone" placeholder="Mobile (Indian Number Only)" required>
+
+            <textarea id="address" name="address" placeholder="Complete Address" required></textarea>
+            <label class="sublbl" style="font-size:12px;padding-bottom:10px;">Order with incomplete/invalid address will be rejected.</label>
+
+            <!-- Additional tests checkboxes -->
+<hr>
+            <label class="sublbl">Tick To Add Additional Tests(Optional)</label>
+            <br><br>
+            
+            <label class="agreecheck">
+                <input type="checkbox" id="additionalTestsCheckbox" name="additional_tests" value="1" onclick="toggleAdditionalTestDropdown();">
+                <span>Add Additional Tests</span>
+            </label>
+
+            <!-- Additional test dropdown container -->
+            <div class="additional-test-container" id="additionalTestContainer">
+                <label for="additionalTestsSelect">Select Additional Test:</label>
+                <select id="additionalTestsSelect" name="additional_tests_select">
+                    <option value="">Select Test</option>
+                    <option value="Test1">Test 1</option>
+                    <option value="Test2">Test 2</option>
+                    <!-- Add more test options here -->
+                </select>
+            </div>
+            <br>
+			
+            <!-- Include checkboxes for additional tests here -->
+
+            <!-- Hard copy checkbox -->
+
+            
+            <!-- Coupons input and apply button -->
+
+            <label>
+                <input type="radio" id="homeAppointment" name="appointmentType" value="Home" checked>
+                Home
+            </label>
+            <label>
+                <input type="radio" id="labAppointment" name="appointmentType" value="Lab">
+                Lab
+            </label>
+            
+		<br>
+
+            <!-- Total amount calculation -->
+
+            <label style="padding-bottom: 8px; display:block;">
+                <span id="totalamnt"><strong>Test price: <span id="tprice"> Rs. 300 </span></strong></span>
+            </label>
+
+            <div id="coupondiscount" style="margin-bottom: 10px; display:none;"></div>
+
+            <label id="hccrglbl">
+                <span id="totalamnt"><strong>Home Collection Charge: <span id="hcprice">Rs. 0</span></strong></span>
+            </label>
+
+            <label>
+                <span id="totalamnt"><strong>Total Amount: <span id="totalprice"> Rs. 300 </span></strong></span>
+            </label>
+
+            <br>
+            <input type="hidden" id="coupontextbox" name="coupontextbox" value="">
+            <input type="hidden" id="product_id" name="product_id" value="77">
+            <input type="hidden" id="price" name="price" value="300">
+            <input type="hidden" name="currenturl" value="https://www.diagnosticcentres.in/health-checkup-packages/cbc-hemogram">
+            <input id="frmsubbtn" type="submit" class="frmsub" value="Book Now">
+            <input type="hidden" name="sunday" id="sunday" value="">
+        </div>
+    </div>
+
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row px-md-3">
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Company</h5>
+          <ul class="footer-menu">
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Career</a></li>
+            <li><a href="#">Editorial Team</a></li>
+            <li><a href="#">Protection</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>More</h5>
+          <ul class="footer-menu">
+            <li><a href="#">Terms & Condition</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Advertise</a></li>
+            <li><a href="#">Join as Doctors</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Our partner</h5>
+          <ul class="footer-menu">
+            <li><a href="#">One-Fitness</a></li>
+            <li><a href="#">One-Drugs</a></li>
+            <li><a href="#">One-Live</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-lg-3 py-3">
+          <h5>Contact</h5>
+          <p class="footer-link mt-2">351 Willow Street Franklin, MA 02038</p>
+          <a href="#" class="footer-link">701-573-7582</a>
+          <a href="#" class="footer-link">healthcare@temporary.net</a>
+
+          <h5 class="mt-3">Social Media</h5>
+          <div class="footer-sosmed mt-3">
+            <a href="#" target="_blank"><span class="mai-logo-facebook-f"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-twitter"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-google-plus-g"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-instagram"></span></a>
+            <a href="#" target="_blank"><span class="mai-logo-linkedin"></span></a>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <p id="copyright">Copyright &copy; 2020 <a href="https://macodeid.com/" target="_blank">MACode ID</a>. All right reserved</p>
+    </div>
+  </footer>
+
+<script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
+
+<script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
+
+<script src="{% static '/assets/vendor/owl-carousel/js/owl.carousel.min.js'%}"></script>
+
+<script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
+
+<script src="{% static '/assets/js/theme.js'%}"></script>
+<script>
+    function showBeneficiaryFields(numPersons) {
+        const beneficiaryFields = document.getElementById("beneficiaryFields");
+        beneficiaryFields.innerHTML = ""; // Clear previous fields
+
+        for (let i = 1; i <= numPersons; i++) {
+            const beneficiaryDiv = document.createElement("div");
+            beneficiaryDiv.style.float = "left";
+            beneficiaryDiv.style.width = "100%";
+
+            const nameInput = document.createElement("input");
+            nameInput.type = "text";
+            nameInput.id = "name" + i;
+            nameInput.name = "name" + i;
+            nameInput.placeholder = " Name " + i;
+            beneficiaryDiv.appendChild(nameInput);
+
+            const ageDiv = document.createElement("div");
+            ageDiv.style.float = "left";
+            ageDiv.style.width = "49%";
+
+            const ageInput = document.createElement("input");
+            ageInput.type = "text";
+            ageInput.id = "age" + i;
+            ageInput.name = "age" + i;
+            ageInput.placeholder = "Age";
+            ageDiv.appendChild(ageInput);
+            beneficiaryDiv.appendChild(ageDiv);
+
+            const genderDiv = document.createElement("div");
+            genderDiv.style.float = "right";
+            genderDiv.style.width = "49%";
+
+            const genderSelect = document.createElement("select");
+            genderSelect.id = "gender" + i;
+            genderSelect.name = "gender" + i;
+            genderSelect.onchange = calculateTotalAmount;
+
+            const genderOptionDefault = document.createElement("option");
+            genderOptionDefault.value = "";
+            genderOptionDefault.text = "Select Gender";
+            genderSelect.appendChild(genderOptionDefault);
+
+            const genderOptionMale = document.createElement("option");
+            genderOptionMale.value = "Male";
+            genderOptionMale.text = "Male";
+            genderSelect.appendChild(genderOptionMale);
+
+            const genderOptionFemale = document.createElement("option");
+            genderOptionFemale.value = "Female";
+            genderOptionFemale.text = "Female";
+            genderSelect.appendChild(genderOptionFemale);
+
+            genderDiv.appendChild(genderSelect);
+            beneficiaryDiv.appendChild(genderDiv);
+
+            beneficiaryFields.appendChild(beneficiaryDiv);
+        }
+    }
+
+    function calculateTotalAmount() {
+        // Your calculation logic for the total amount goes here
+        // You can access beneficiary names, ages, and genders using their respective IDs
+        // Update the total amount fields accordingly
+    }
+    function toggleAdditionalTestDropdown() {
+        const additionalTestsCheckbox = document.getElementById("additionalTestsCheckbox");
+        const additionalTestContainer = document.getElementById("additionalTestContainer");
+
+        if (additionalTestsCheckbox.checked) {
+            additionalTestContainer.style.display = "block";
+        } else {
+            additionalTestContainer.style.display = "none";
+        }
+    }
+    
+</script>
+</body>
+</html>
