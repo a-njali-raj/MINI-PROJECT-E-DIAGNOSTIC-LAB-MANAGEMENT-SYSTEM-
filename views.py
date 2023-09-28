@@ -19,7 +19,7 @@ def loginn(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponse('Login successful')
+            return redirect('user')
         else:
             messages.error(request, 'Invalid username or password')  # Add an error message
             return redirect('login')  # Redirect back to the login page
@@ -37,3 +37,5 @@ def signup(request):
 
 def appoinment(request):
     return render(request,'appoinment.html')
+def user(request):
+    return render(request,'user.html')
