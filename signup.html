@@ -180,6 +180,14 @@ header{
         border-radius: 4px;
         cursor: pointer;
     }
+    .custom-dropdown-button {
+    background-color: #4aecb6d9; /* Change the background color to your desired color */
+    color: #191717; /* Change the text color to white or your preferred color */
+    padding: 5px 10px; /* Adjust padding to control the button size */
+    font-size: 14px; /* Adjust font size as needed */
+    border: none; /* Remove border if not needed */
+    border-radius: 3px; /* Apply rounded corners if desired */
+  }
   </style>
   
 
@@ -241,9 +249,21 @@ header{
       
     </nav>
   </header>
+ 
   <br><br>
   <div class="container">
-    <h2><center>Register here</center></h2>
+    <h3><center><b>Join Our Community</b></center></center></h3>
+    <div class="dropdown">
+      <button class="custom-dropdown-button" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+       Register as?
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#">Staff</a>
+        <a class="dropdown-item" href="#">Patient</a>
+      </div>
+    </div>
+    <span id="registration-type-display"></span>
+
     <form action="" method="post" id="registration-form">
       {% csrf_token %}
         <!-- Personal Information -->
@@ -251,17 +271,10 @@ header{
             <label for="first-name">Full Name:</label>
             <input type="text" id="first-name" name="first-name" required>
             <span id="full-name-error" class="error"></span>
+            
         </div>
-        <div class="form-row">
-          <label>Gender:</label>
-          <input type="radio" id="male" name="gender" value="Male" required>
-          <label for="male">Male</label>
-          <input type="radio" id="female" name="gender" value="Female">
-          <label for="female">Female</label>
-          <input type="radio" id="other" name="gender" value="Other">
-          <label for="other">Other</label>
-          <span id="gender-error" class="error"></span>
-      </div>
+        
+       
       
         <div class="form-row">
             <label for="dob">Date of Birth:</label>
@@ -389,6 +402,22 @@ header{
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // Find the dropdown button and the span for displaying the selected value
+    const dropdownButton = document.querySelector(".custom-dropdown-button");
+    const registrationTypeDisplay = document.getElementById("registration-type-display");
+
+    // Add an event listener to the dropdown items
+    const dropdownItems = document.querySelectorAll(".dropdown-item");
+
+    dropdownItems.forEach(function (item) {
+      item.addEventListener("click", function () {
+        // Get the text content of the clicked item and set it as the button's text
+        const selectedValue = item.textContent;
+        dropdownButton.textContent = selectedValue;
+      });
+    });
+  });
+  document.addEventListener("DOMContentLoaded", function () {
     const fullNameInput = document.getElementById("first-name");
     const genderInputs = document.querySelectorAll('input[name="gender"]');
     const genderError = document.getElementById("gender-error");
@@ -421,29 +450,16 @@ header{
   const errorElement = document.getElementById("full-name-error");
 
   if (!fullNamePattern.test(fullName)) {
-    errorElement.textContent = "Full Name must be at least 3 characters long and contain only letters and spaces";
+    errorElement.textContent = "Full Name must be at least 3 letters long ";
   } else {
     errorElement.textContent = "";
   }
 }
 
 
-function validateGender() {
-    const selectedGender = [...genderInputs].some((input) => input.checked);
-    const genderError = document.getElementById("gender-error");
 
-    if (!selectedGender) {
-        genderError.textContent = "Please select a gender.";
-        return false; // Validation failed
-    } else {
-        genderError.textContent = "";
-        return true; // Validation successful
-    }
-}
 
-genderInputs.forEach((input) =>
-    input.addEventListener("change", validateGender)
-);
+
 
 
     function validateDOB() {
@@ -459,26 +475,33 @@ genderInputs.forEach((input) =>
     }
 
     function validateEmail() {
-      const email = emailInput.value.trim();
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      const errorElement = document.getElementById("email-error");
-      if (!emailPattern.test(email)) {
-        errorElement.textContent = errorMessages.email;
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+  const email = emailInput.value.trim();
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  const errorElement = document.getElementById("email-error");
+
+  if (!emailPattern.test(email)) {
+    errorElement.textContent = "Invalid email format. Please enter a valid email address.";
+  } else if (email.length > 320) {
+    errorElement.textContent = "Email address is too long. Please use a shorter email address.";
+  } else {
+    errorElement.textContent = "";
+  }
+}
+
 
     function validatePhone() {
-      const phone = phoneInput.value.trim();
-      const phonePattern = /^\d{10}$/; // Assumes a 10-digit phone number
-      const errorElement = document.getElementById("phone-error");
-      if (!phonePattern.test(phone)) {
-        errorElement.textContent = errorMessages.phone;
-      } else {
-        errorElement.textContent = "";
-      }
-    }
+  const phone = phoneInput.value.trim();
+  const phonePattern = /^[6789]\d{9}$/; // Starts with 6, 7, 8, or 9 and has 10 digits
+  const errorElement = document.getElementById("phone-error");
+
+  if (!phonePattern.test(phone)) {
+    errorElement.textContent = "Invalid phone number format";
+  } else if (/^0{10}$/.test(phone)) {
+    errorElement.textContent = "Phone number cannot contain all zeros";
+  } else {
+    errorElement.textContent = "";
+  }
+}
 
     function validateHomeAddress() {
     const homeAddress = homeAddressInput.value.trim();
@@ -570,7 +593,10 @@ function validateZIP() {
     usernameInput.addEventListener("input", validateUsername);
     passwordInput.addEventListener("input", validatePassword);
     confirmPasswordInput.addEventListener("input", validatePassword);
+
+    
   });
+  
 </script>
 
 <!-- ... (rest of your HTML code) ... -->
