@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 from tests.models import (
     Address,
@@ -45,6 +47,7 @@ def loginn(request):
                 return redirect("admin_dashboard")
             elif user.is_staff:
                 return redirect("staff_dashboard")
+            messages.success(request, "Login successful.")
             return redirect("user")
         else:
             messages.error(
@@ -78,8 +81,46 @@ def signup(request):
             phone_number=phone_number,
             address=address,
         )
+        messages.success(request, "registration successful.")
         return redirect("login")
     return render(request, "signup.html")
+
+def check_username(request):
+    if request.method == 'GET':
+        username = request.GET.get('username', None)
+
+        if username is not None:
+            # Check if the username already exists
+            user_exists = User.objects.filter(username=username).exists()
+            data = {'exists': user_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
+def check_email(request):
+    if request.method == 'GET':
+        email = request.GET.get('email', None)
+
+        if email is not None:
+            # Check if the email already exists
+            email_exists = User.objects.filter(email=email).exists()
+            data = {'exists': email_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
+def check_phone(request):
+    if request.method == 'GET':
+        phone = request.GET.get('phone', None)
+
+        if phone is not None:
+            # Check if the phone number already exists
+            phone_exists = User.objects.filter(phone_number=phone).exists()
+            data = {'exists': phone_exists}
+            return JsonResponse(data)
+
+    # Handle invalid or empty request
+    return JsonResponse({'exists': False})
 
 
 @login_required
