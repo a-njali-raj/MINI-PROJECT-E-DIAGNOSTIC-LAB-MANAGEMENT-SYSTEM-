@@ -47,11 +47,13 @@ def loginn(request):
             login(request, user)
             request.session['username']=user.username
             if user.is_superuser:
+                messages.success(request, "Login successful.")
                 return redirect("admin_dashboard")
             elif user.is_staff:
                 return redirect("staff_dashboard")
             messages.success(request, "Login successful.")
             return redirect("user")
+            
         else:
             messages.error(
                 request, "Invalid username or password"
@@ -102,6 +104,19 @@ def check_username_availability(request):
 
         return JsonResponse({"available": available})
 
+def check_email_availability(request):
+    email = request.GET.get('email', '')
+
+    if len(email) >= 5:  # Adjust the minimum length as needed
+        # Check if the email exists in your database
+        user = User.objects.filter(email=email).first()
+
+        if user:
+            return JsonResponse({'available': False})  # Email is already registered
+        else:
+            return JsonResponse({'available': True})  # Email is available
+    else:
+        return JsonResponse({'available': False})  # Emai
 @never_cache
 @login_required
 def appoinment(request):
@@ -201,3 +216,7 @@ def handlelogout(request):
     if request.user.is_authenticated:
         logout(request)
     return redirect('login')
+@never_cache
+@login_required(login_url='login')
+def userprofile(request):
+    return render(request, "userprofile.html")
