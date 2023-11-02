@@ -12,11 +12,11 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=10, null=True, blank=True)
 
 
+
 class Test(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_available = models.BooleanField(default=True)
-
 
 class Patient(models.Model):
     full_name = models.CharField(max_length=255)
@@ -25,9 +25,9 @@ class Patient(models.Model):
 
 
 class Address(models.Model):
-    street_address = models.TextField()
-    city = models.CharField(max_length=100)
-    pincode = models.CharField(max_length=6)
+    street_address = models.TextField(blank=True, null=True)
+    city = models.CharField(max_length=100,blank=True, null=True)
+    pincode = models.CharField(max_length=6,blank=True, null=True)
 
 
 class Appoinment(models.Model):
