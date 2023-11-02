@@ -136,7 +136,7 @@ body {
     display: flex;
     width: 100vw;
     position: relative;
-    top: 70px;
+    top: 40px;
     z-index: 1;
     }
     .dpicn {
@@ -321,9 +321,72 @@ body {
     box-shadow: 0 0 10px rgba(65, 117, 109, 0.1);
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 236, 226, 0.1);
+}
+
+/* Style the table header */
+th {
+    background-color: #a5c4bd;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Style the table rows */
+tr {
+    transition: background-color 0.3s;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style the table cells (columns) */
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+/* Extend the Action header cell */
+th.action-header {
+    width: 100px;
+}
 
 /* Style the action buttons in the table */
+.btn-edit, .btn-delete {
+    padding: 5px 9px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
 
+.btn-edit {
+    background-color: #76c676;
+}
+
+.btn-delete {
+    background-color: #f44336;
+}
+
+.btn-edit:hover {
+    background-color: #5aaf5a;
+}
+
+.btn-delete:hover {
+    background-color: #d63737;
+}
 .dropdown .btn-secondary {
     background-color: #09ae96;
     color: #fff;
@@ -365,73 +428,50 @@ body {
     background-color: #042f2d; /* Change background color on hover */
     color: #fff; /* Change text color on hover */
 }
-body {
-        font-family: Arial, sans-serif;
-    }
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    .test-listing {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin: 10px 0;
-    }
-    .test-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    .lab-name {
-        color: #666;
-    }
-    .test-price {
-        color: rgb(5, 33, 35);
-    }
-   
-    /* Form Styles */
-    .form-container {
-        margin-top: 20px;
-        border: 1px solid #ccc;
-        padding: 20px;
-    }
-    .form-input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-    }
-    .form-label {
-        font-weight: bold;
-    }
-    .error-message {
-        color: red;
-    }
-    .edit-button {
-        font-size: 10px; /* Adjust the font size as needed */
-        padding: 3px 8px; /* Adjust the padding as needed */
-    }
-
-    /* Style for the delete button */
-    .delete-button {
-        font-size: 10px; /* Adjust the font size as needed */
-        padding: 3px 8px; /* Adjust the padding as needed */
-    }
-    .button-link {
-    display: inline-block;
-    padding: 10px 10px;
-    background-color: rgb(19, 76, 71);
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 6px;
+.delete-button {
+            color: red;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            text-decoration: underline;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .availability-checkbox {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
 }
 
-.button-link:hover {
-    background-color: #065651; /* Darken the color on hover */
+.availability-checkbox input[type="checkbox"] {
+    margin-right: 10px; /* Add some spacing between the checkbox and label */
 }
-.button-container {
-    display: flex; /* Display buttons in a row */
-    gap: 10px; /* Adjust the gap between buttons */
-    align-items: center; /* Align buttons vertically */
+
+.availability-checkbox label {
+    font-size: 16px;
+    color: #333; /* You can adjust the color as needed */
 }
     </style>
     </head>
@@ -514,7 +554,6 @@ body {
                             <h3 style="font-size: 17px;"> Test</h3>
                         </div>
                     </a>
-                    <a href="adminstaff.html">
                         <div class="nav-option option4">
                             <img src=
     "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/6.png"
@@ -522,62 +561,43 @@ body {
                                 alt="institution">
                             <h3 style="font-size: 17px;"> Staffs</h3>
                         </div>
-                    </a>
+    
                     </div>
                 </nav>
             </div>
-            <div class="main">
-    
-               
-                <div class="container">
-                    <div class="button-row">
-                        <b><a href="{% url 'addtest' %}" class="button-link">Add a Test</a></b>
-                        <b><a href="" class="button-link">Add Staff</a></b>
-                    </div>
-                    
-                    
-                
+        <div class="main">
+            <!-- Your existing content here -->
 
-                          <div class="container">
-                            <ul>
-                                {% for test in tests %}
-                                    <li class="test-listing">
-                                        <div class="test-title">{{ test.name }}</div>
-                                        <div class="test-price">{{ test.price }}</div>
-                                        <div class="available">
-                                            {% if test.is_available %}
-                                                true
-                                            {% else %}
-                                                false
-                                            {% endif %}
-                                        </div>
-                                        <!-- Edit button -->
-                                        <div class="button-container">
-                                            <!-- Edit button -->
-                                            <button class="btn btn-primary edit-button" data-test-id="{{ test.id }}">Edit</button>
-                            
-                                            <!-- Delete button (use a form for safety) -->
-                                            <form action="{% url 'delete_test' test.id %}" method="post"onsubmit="return confirmDelete()">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="test_id" value="{{ test.id }}">
-                                                <button type="submit" class="btn btn-danger delete-button">Delete</button>
-                                            </form>
-                                        </div>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        
+            <!-- Add this form within the "main" div -->
+            <div class="report-container">
+                <div class="report-header">
+                    <h3>Add New Laboratory Test</h3>
+                </div>
+                <div class="report-body">
+                    <form method="post">
+                        {% csrf_token %}
                     
-                    </div>
-                   
-                    <!-- Add more test listings here -->
-                  </div>
-               
-    
-            
+                 
+                    
+                        <label for="name">Test Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    
+                        <label for="price">Price:</label>
+                        <input type="text" id="price" name="price" required>
+                        <input type="hidden" id="availability" name="is_available" value="False">
+                    
+                        <div class="availability-checkbox">
+                            <input type="checkbox" id="checkbox-availability" onchange="updateAvailability()">
+                            <label for="availability">Available</label>
+                        </div>
+                
+                        <a href="{% url 'admintest'  %}">
+                        <input type="submit" value="Add Test">
+                        </a>
+                    </form>
+                </div>
             </div>
-        </div>
+       
         <script src="{% static '/assets/js/jquery-3.5.1.min.js'%}"></script>
 
         <script src="{% static '/assets/js/bootstrap.bundle.min.js'%}"></script>
@@ -587,23 +607,19 @@ body {
         <script src="{% static '/assets/vendor/wow/wow.min.js'%}"></script>
     
         <script src="{% static '/assets/js/theme.js'%}"></script>
-        <script>
-            // Add an event listener to all "Edit" buttons with class "edit-button"
-            const editButtons = document.querySelectorAll('.edit-button');
-            editButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Get the test ID from the data attribute
-                    const testId = this.getAttribute('data-test-id');
-                    
-                    // Redirect to the updatetest.html page with the test ID as a parameter
-                    window.location.href = `{% url 'updatetest' %}?test_id=${testId}`;
-                });
-            });
-            function confirmDelete() {
-        return confirm("Are you sure you want to delete this test?"); // Display a confirmation dialog
-    }
-        </script>
-           
         
+        <script>
+          function updateAvailability() {
+            const checkbox = document.getElementById("checkbox-availability");
+            const availabilityField = document.getElementById("availability");
+
+            // Update the hidden input field value based on the checkbox status
+            if (checkbox.checked) {
+                availabilityField.value = "True";
+            } else {
+                availabilityField.value = "False";
+            }
+        }
+        </script>
     </body>
     </html>
