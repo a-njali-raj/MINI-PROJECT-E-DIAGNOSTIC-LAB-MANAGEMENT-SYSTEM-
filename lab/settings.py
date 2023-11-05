@@ -125,6 +125,10 @@ STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static')
 ]
 
+# Media
+MEDIA_ROOT = 'media/'
+MEDIA_URL = 'media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -143,3 +147,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'anjaliraj2024a@mca.ajce.in'
 EMAIL_HOST_PASSWORD = 'Successmca@2024'
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+SESSION_COOKIE_NAME = "sessionid"
+SESSION_COOKIE_AGE = 600
+LOGIN_URL = 'login'
