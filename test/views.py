@@ -190,7 +190,7 @@ def appoinment(request):
         if appoinment_type == "Home":
             location = Location.objects.create(
                 address=request.POST.get("location-address"),
-                distance=request.POST.get("location-distance"),
+                distance=request.POST.get("location-distance") or 0,
                 latitude=request.POST.get("location-lat"),
                 longitude=request.POST.get("location-lng"),
             )
@@ -235,18 +235,22 @@ def payment(request, appoinment_id):
     if appoinment.payment_set.exists():
         messages.error(request, "Payment for this appoinment is already complete.")
         return redirect("home")
-    order = generate_order(
+    try:
+        order = generate_order(
         appoinment.amount,
-    )
-    appoinment.razorpay_order_id = order.get("id")
-    appoinment.save()
-    context = {
-        "appoinment": appoinment,
-        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
-        "order": order,
-        "callback_url": request.build_absolute_uri(reverse('verify-payment')),
-    }
-    return render(request, "payment.html", context)
+        )
+        appoinment.razorpay_order_id = order.get("id")
+        appoinment.save()
+        context = {
+             "appoinment": appoinment,
+             "razorpay_key_id": settings.RAZORPAY_KEY_ID,
+             "order": order,
+             "callback_url": request.build_absolute_uri(reverse('verify-payment')),
+             }
+        return render(request, "payment.html", context)
+    except Exception as e:
+        messages.error(request, f"Error generating order: {str(e)}")
+        return redirect("appoinment", appoinment_id=appoinment_id)
 
 @never_cache
 @login_required(login_url='login')
@@ -348,3 +352,18 @@ def Review_rate(request):
 
         messages.success(request, 'Review submitted successfully!')
         return redirect('home')  # Redirect to home or another appropriate page
+    
+@never_cache
+@login_required()
+def myappoinment(request):
+    context = {
+        "tests": Test.objects.filter(is_available=True),
+        "locations": Location.objects.all(),
+    }
+
+    # Fetch the user's appointments
+    user_appoinments = Appoinment.objects.filter(user=request.user).order_by('-created_at')
+
+    context["user_appoinments"] = user_appoinments # Add this line
+
+    return render(request, "myappoinment.html", context)
