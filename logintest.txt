@@ -1,0 +1,43 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+from selenium.webdriver.support.ui import WebDriverWait
+
+from selenium.webdriver.support import expected_conditions as EC
+
+# ... (your imports)
+
+class LoginTest(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.base_url = "http://localhost:8000/login.html"
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(10)
+
+    def wait_for_element(self, by, value, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((by, value))
+        )
+
+    def test_successful_login(self):
+        self.driver.get(self.base_url)
+
+        username = self.wait_for_element(By.ID, 'username')
+        password = self.wait_for_element(By.ID, 'password')
+
+        username.send_keys("anu")
+        password.send_keys("Anu@12345")
+
+        login_button = self.wait_for_element(By.ID, 'login-button')
+        login_button.click()
+
+        self.assertIn("user.html", self.driver.current_url)
+
+    
+
+    def tearDown(self):
+        self.driver.quit()
+
+if __name__ == "__main__":
+    unittest.main()

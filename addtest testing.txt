@@ -1,0 +1,64 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import time
+
+class AdminDashboardTest(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.base_url = "http://localhost:8000/admin-dashboard"  # Update the actual URL
+        self.driver.maximize_window()
+        self.driver.implicitly_wait(10)
+
+    def wait_for_element(self, by, value, timeout=10):
+        return WebDriverWait(self.driver, timeout).until(
+            EC.presence_of_element_located((by, value))
+        )
+
+    def login_admin(self):
+        self.driver.get("http://localhost:8000/login.html")  # Update the actual URL
+
+        username = self.wait_for_element(By.ID, 'username')
+        password = self.wait_for_element(By.ID, 'password')
+
+        username.send_keys("admin")
+        password.send_keys("P@ssw0rd")
+
+        login_button = self.wait_for_element(By.ID, 'login-button')
+        login_button.click()
+
+    def test_add_test_and_redirect(self):
+        self.login_admin()  # Login as admin first
+
+    # Assuming the "Add a Test" link has the ID 'addTestLink'
+        add_test_link = self.wait_for_element(By.ID, 'addTestLink')
+        add_test_link.click()
+
+    # Assuming the fields have the IDs 'name', 'price', 'checkbox-availability', and 'addTestButton'
+        name_input = self.wait_for_element(By.ID, 'name')
+        price_input = self.wait_for_element(By.ID, 'price')
+        availability_checkbox = self.wait_for_element(By.ID, 'checkbox-availability')
+        add_test_button = self.wait_for_element(By.ID, 'addTestButton')
+
+    # Fill in the details
+        name_input.clear()  # Clear any existing text in the input
+        name_input.send_keys("New Test")
+
+        price_input.clear()  # Clear any existing text in the input
+        price_input.send_keys("50.00")
+
+    # Ensure the checkbox is checked
+        if not availability_checkbox.is_selected():
+          availability_checkbox.click()
+
+    # Add a delay to ensure the checkbox state is updated
+        time.sleep(1)
+
+    # Click the "Add Test" button
+        add_test_button.click()
+
+
+    # Assert that the page is redirected to 'admintest.html'
+        self.assertIn("admintest.html", self.driver.current_url)
