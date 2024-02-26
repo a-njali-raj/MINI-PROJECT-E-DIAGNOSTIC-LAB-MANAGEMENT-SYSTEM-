@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.urls import reverse
 from datetime import datetime 
+from django.db.models import Q
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from tests.models import (
@@ -409,14 +410,22 @@ def payment_success(request,appoinment_id):
 
 @never_cache
 def product_list(request):
-    products = Product.objects.filter(is_available=True, stock__gt=0)
-    # Pass the products to the template context
+    products = Product.objects.filter(Q(is_available=True, stock__gt=0) | Q(is_available=True, stock=0))
+    cart_item_ids = []  
+    # Logic to get cart items IDs for authenticated users
+    if request.user.is_authenticated:
+        cart_items = request.user.cartitem_set.all()
+        cart_item_ids = [item.product.id for item in cart_items]
     context = {
         'products': products,
+        'cart_item_ids': cart_item_ids,
+        'user': request.user  # Assuming user authentication is handled properly
     }
-
     return render(request, "product.html", context)
+
+
 @never_cache
+@login_required()
 def product_detail(request, product_id):
     product = Product.objects.get(pk=product_id)
     return render(request, "product-detail.html", {"product": product})
@@ -431,7 +440,8 @@ def add_to_cart(request):
         return redirect("product")
     product = Product.objects.get(pk=product_id)
     quantity = int(quantity)
-    cart_item = CartItem.objects.filter(product=product, order__isnull=True).first()
+    # Check if the user has an existing cart item for this product
+    cart_item = CartItem.objects.filter(product=product, user=request.user, order__isnull=True).first()
     if cart_item is not None:
         cart_item.quantity += quantity
     else:
@@ -446,6 +456,7 @@ def add_to_cart(request):
     cart_item.save()
     messages.success(request, f"{product.product_name} added to cart.")
     return redirect("cart")
+
 
 @never_cache
 @login_required
@@ -546,3 +557,13 @@ def remove_from_cart(request):
         cart_item.delete()
         messages.success(request, f"{cart_item.product.product_name} removed from cart.")
     return redirect('cart')
+
+
+def product_search(request):
+    query = request.GET.get('query')
+    products = Product.objects.filter(
+        Q(product_name__icontains=query) | 
+        Q(brand__icontains=query),
+        is_available=True  # Filter products with is_available=True
+    ) if query else Product.objects.filter(is_available=True)
+    return render(request, 'product.html', {'products': products})
