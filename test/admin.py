@@ -7,7 +7,11 @@ admin.site.register(Test)
 admin.site.register(Patient)
 admin.site.register(Address)
 admin.site.register(Appoinment)
-
+admin.site.register(User)
+admin.site.register(Review)
+admin.site.register(Product)
+admin.site.register(Order)
+admin.site.register(Location)
 
 class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):

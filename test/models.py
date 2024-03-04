@@ -48,7 +48,11 @@ class User(AbstractBaseUser):
     )
     phone_number = models.CharField(max_length=10, null=True, blank=True)
     profile_pic = models.ImageField(upload_to="media/profile-pics/", null=True, blank=True,)
-    
+    is_deliveryboy = models.BooleanField(
+        "Delivery Boy Status",
+        default=False,
+        help_text="Designates whether the user is a delivery boy.",
+    )
     objects = UserManager()
 
     EMAIL_FIELD = "email"
@@ -136,10 +140,10 @@ class Appoinment(models.Model):
         related_name="appoinment_report",
     )
 class Location(models.Model):
-    address = models.TextField()
-    distance = models.DecimalField(max_digits=10, decimal_places=2)
-    latitude = models.CharField(max_length=50)
-    longitude = models.CharField(max_length=50)
+    address = models.TextField(null=True,blank=True)
+    distance = models.DecimalField(max_digits=10, decimal_places=2,null=True,blank=True)
+    latitude = models.CharField(max_length=50,null=True,blank=True)
+    longitude = models.CharField(max_length=50,null=True,blank=True)
 
 class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -176,7 +180,7 @@ class Product(models.Model):
     product_image = models.ImageField(upload_to='product_images/',null=True,blank=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
     stock = models.IntegerField(default=0)
-    #description = models.TextField()
+    description = models.TextField(null=True, blank=True) 
 
     @property
     def product_sale_price(self):
@@ -200,3 +204,4 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='orders',null=True, blank=True)

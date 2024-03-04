@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import get_user_model
@@ -69,6 +70,8 @@ def loginn(request):
                 return redirect("admin_dashboard")
             elif user.is_staff:
                 return redirect("staff_dashboard")
+            elif user.is_deliveryboy:
+                return redirect("deliveryboy_dashboard")
             messages.success(request, "Login successful.")
             return redirect("user")
             
@@ -467,6 +470,18 @@ def cart(request):
     )
     return render(request, "cart.html", {"cart_items": cart_items})
 
+@login_required
+def update_cart_item(request):
+    if request.method == "POST":
+        item_id = request.POST.get('item_id')
+        quantity = request.POST.get('quantity')
+        cart_item = CartItem.objects.get(id=item_id)
+        cart_item.quantity = quantity
+        cart_item.save()
+        return redirect('cart')  # Redirect to cart page after updating quantity
+    return redirect('cart')  # Redirect to cart page if not a POST request
+
+
 @never_cache
 @login_required
 def checkout(request):
@@ -476,7 +491,7 @@ def checkout(request):
     )
     total_amount = 0
     for item in cart_items:
-        total_amount += item.total_price
+        total_amount += item.product.product_sale_price * item.quantity
     context = {
         "total_amount": total_amount,
         "cart_items": cart_items,
@@ -492,6 +507,11 @@ def order(request):
     city = request.POST.get("city")
     pincode = request.POST.get("pincode")
     product_id = request.POST.get("product_id", None)
+    location_address=request.POST.get("location-address")
+    location_distance = request.POST.get("location-distance") or 0
+    location_latitude = request.POST.get("location-lat")
+    location_longitude = request.POST.get("location-lng")
+
     
     # Retrieve the product
     product = None
@@ -508,7 +528,17 @@ def order(request):
         city=city,
         pincode=pincode,
     )
+    
+    location = Location.objects.create(
+        address=location_address,
+        distance=location_distance,
+        latitude=location_latitude,
+        longitude=location_longitude,
+    )
 
+    
+    # Calculate the additional amount based on distance
+    additional_amount = Decimal(location_distance) * Decimal('5')  # Assuming rate is ₹5 per kilometer
     # Perform the order creation inside a transaction
     with transaction.atomic():
         if product:
@@ -536,12 +566,14 @@ def order(request):
 
         # Calculate total amount
         total_amount = sum(item.total_price for item in cart_items)
-
+        
+        total_amount += additional_amount
         # Create an order
         order = Order.objects.create(
             user=request.user,
             address=address,
             total_amount=total_amount,
+            location=location,
         )
 
         # Update cart items with the order
@@ -567,3 +599,14 @@ def product_search(request):
         is_available=True  # Filter products with is_available=True
     ) if query else Product.objects.filter(is_available=True)
     return render(request, 'product.html', {'products': products})
+
+
+
+def myorder(request):
+    # Fetch orders for the current user along with related cart items and products
+    orders = Order.objects.filter(user=request.user,  payment__status=True).prefetch_related('cartitem_set__product')
+
+    context = {
+        'orders': orders
+    }
+    return render(request, 'myorder.html', context)
