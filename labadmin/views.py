@@ -351,6 +351,7 @@ def addproduct(request):
             description=description,  
         )
         product.save()
+    
 
         messages.success(request, 'Health product added successfully.')
         return redirect('adminproduct.html')  # Adjust the URL as needed
@@ -442,10 +443,12 @@ def adddeliveryboy(request):
 
     return render(request, 'add_deliveryboy.html')
 
+
 @never_cache
 @login_required(login_url='login')
 def deliveryboy_dashboard(request):
     return render(request, "deliveryboy_dashboard.html")
+
 
 @never_cache
 @login_required(login_url='login')
@@ -460,6 +463,7 @@ def admindeliveryboy(request):
     context = {'staff_users': staff_users}
     return render(request, 'admindeliveryboy.html', context)
 
+
 @never_cache
 @login_required(login_url='login')
 @user_passes_test(is_superuser)
@@ -471,7 +475,31 @@ def delete_deliveryboy(request, user_id):
     messages.success(request, "Delivery boy is removed successfully.")
     return redirect('admin_dashboard') 
 
+
 @never_cache
 @login_required(login_url='login')
-def deliveryboy_edit(request):
-    return render(request, "deliveryboy_edit.html")
+def deliveryboy_edit(request, order_id):
+    try:
+        order = Order.objects.get(pk=order_id)
+    except Order.DoesNotExist:
+        order = None  # Handle the case where the order does not exist
+    return render(request, "deliveryboy_edit.html", {'order': order})
+
+
+@never_cache
+@login_required(login_url='login')
+def update_delivery_status(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        delivery_status = request.POST.get('delivery_status')
+        try:
+            order = Order.objects.get(pk=order_id)
+            order.delivery_status = delivery_status
+            order.save()
+            messages.success(request, 'Delivery status updated successfully.')
+        except Order.DoesNotExist:
+            messages.error(request, 'Order does not exist.')
+        except Exception as e:
+            messages.error(request, f'An error occurred: {e}')
+        return redirect('deliveryboy_edit', order_id=order_id)  # Redirect to the same page after form submission
+    return render(request, "deliveryboy_edit", {'order_id': order_id})
