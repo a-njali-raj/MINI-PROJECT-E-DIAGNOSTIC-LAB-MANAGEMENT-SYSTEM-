@@ -28,7 +28,10 @@ urlpatterns = [
     path('delete/<int:product_id>/', views.delete_product, name='delete_product'),
     path('add_deliveryboy.html', views.adddeliveryboy, name="adddeliveryboy"),\
     path('deliveryboy_dashboard.html', views.deliveryboy_dashboard, name="deliveryboy_dashboard"),
-
-
+    path('order_deliverboy', views.order_deliverboy, name="order_deliverboy"),
+    path('admindeliveryboy.html',views.admindeliveryboy,name='admindeliveryboy'),
+    path('delete_deliveryboy/<int:user_id>/', views.delete_deliveryboy, name='delete_deliveryboy'),
+    path('deliveryboy_edit.html', views.deliveryboy_edit, name="deliveryboy_edit"),
+    
 ]
 
