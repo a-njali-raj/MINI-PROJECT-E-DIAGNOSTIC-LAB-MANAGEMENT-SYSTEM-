@@ -472,14 +472,22 @@ table {
             <div class="navcontainer">
                 <nav class="nav">
                     <div class="nav-upper-options">
-                        <a href="deliveryboy_dashboard.html">
+                        <a href="{% url 'deliveryboy_dashboard' %}">
                             <div class="nav-option option1">
                                 
                                 <h3 style="font-size: 17px;"> Dashboard</h3>
                             </div>
                             </a>
                         
-                        
+                            <a href="{% url 'order_deliverboy' %}">
+                                <div class="nav-option option3">
+                                    <img src=
+            "https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
+                                        class="nav-img"
+                                        alt="report">
+                                    <h3 style="font-size: 17px;"> Orders</h3>
+                                </div>
+                            </a>  
                        
                     </div>
                 </nav>
